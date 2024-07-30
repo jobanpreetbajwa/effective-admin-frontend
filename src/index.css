@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (max-width: 1024px) {
+	.visitor-graph {
+		width: calc(100% - 0px) !important;
+	}
+}

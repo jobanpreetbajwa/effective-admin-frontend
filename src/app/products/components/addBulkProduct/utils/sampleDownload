@@ -1,0 +1,31 @@
+// @ts-ignore
+import * as XLSX from 'xlsx';
+import { getSampleBulkUploadExcelFile } from '../../../../../api/function';
+
+const sampleDownload = async () => {
+  try {
+    const options = {
+      responseType: 'blob',
+    };
+    const response = await getSampleBulkUploadExcelFile(options);
+    const worksheet = XLSX.utils.aoa_to_sheet([response.data]);
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    const excelBuffer = XLSX.write(workbook, {
+      type: 'array',
+      bookType: 'xlsx',
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    return blob;
+  } catch (error) {
+    console.log("Error while getting sample product excel file ", error);
+  }
+};
+
+export default sampleDownload;

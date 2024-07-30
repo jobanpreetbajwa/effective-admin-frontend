@@ -1,0 +1,23 @@
+const tags = [
+  'new',
+  'old',
+  'trending',
+  'good',
+  'new',
+  'old',
+  'trending',
+  'good',
+  'new',
+  'old',
+  'trending',
+  'good',
+  'new',
+  'old',
+  'trending',
+  'good',
+  'new',
+  'old',
+  'trending',
+  'good',
+]
+export default tags

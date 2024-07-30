@@ -1,0 +1,29 @@
+.chartjs-tooltip {
+  --cui-body-bg: #fff;
+  --cui-emphasis-color-rgb: 8, 10, 12;
+  --cui-chartjs-tooltip-zindex: 1080;
+  --cui-chartjs-tooltip-padding-x: 0.5rem;
+  --cui-chartjs-tooltip-padding-y: 0.25rem;
+  --cui-chartjs-tooltip-color: var(--cui-body-bg);
+  --cui-chartjs-tooltip-bg: rgba(var(--cui-emphasis-color-rgb), 0.8);
+  --cui-chartjs-tooltip-border-radius: var(--cui-border-radius);
+  --cui-chartjs-tooltip-transition: all 0.15s ease;
+  --cui-chartjs-tooltip-header-margin: 0.5rem;
+  --cui-chartjs-tooltip-header-font-size: 0.875rem;
+  --cui-chartjs-tooltip-header-font-weight: 700;
+  --cui-chartjs-tooltip-body-font-size: 0.875rem;
+  --cui-chartjs-tooltip-body-font-weight: 400;
+
+  border-radius: 4px;
+  color: var(--cui-chartjs-tooltip-color);
+  opacity: 0;
+  padding: var(--cui-chartjs-tooltip-padding-y)
+    var(--cui-chartjs-tooltip-padding-x);
+  pointer-events: none;
+  position: absolute;
+  width: 140px;
+  transform: translate(-50%);
+  transition: var(--cui-chartjs-tooltip-transition);
+  z-index: var(--cui-chartjs-tooltip-zindex);
+  background-color: var(--cui-chartjs-tooltip-bg);
+}

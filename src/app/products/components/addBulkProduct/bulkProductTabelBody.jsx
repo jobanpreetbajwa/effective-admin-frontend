@@ -1,165 +1,193 @@
+import { useState, memo } from 'react'
 import { useSelector } from 'react-redux'
-import { Table, Avatar } from 'flowbite-react'
-import { useState, useEffect, useMemo } from 'react'
+import { Table, Avatar, TextInput } from 'flowbite-react'
 
 import Tags from './components/tags'
 import { ONLY_FLOATING_POINT_HANDLER } from '../../../utilis/regex'
+import { PRODUCT_NAME_MAX_LENGTH } from '../../../constant/products/constant'
 
 import { MdOutlineDelete } from 'react-icons/md'
 
-export default function BulkProductTabelBody({
-  item,
-  index,
-  onDelete,
-  categoryID,
-  isProductsAdding,
-  setBulkProducts,
+const BulkProductTableBody = memo(function BulkProductTableBody({
+	item,
+	index,
+	onDelete,
+	categoryID,
+	isProductsAdding,
+	setBulkProducts,
 }) {
-  const [productName, setProductName] = useState(item?.name || '')
-  // const [images, setImages] = useState(item?.images || [])
-  const [price, setPrice] = useState(item?.mrp_price)
+	const [productName, setProductName] = useState(item?.name || '')
+	// const [images, setImages] = useState(item?.images || [])
+	const [price, setPrice] = useState(item?.mrp_price)
 
-  // const [anyChanges, setAnyChanges] = useState(false)
-  const categoryListSelector = useSelector((state) => state.categoryList)
+	const [uniqueId, setUniqueId] = useState(item?.unique_id || '')
 
-  const currentCategory = categoryListSelector?.find(
-    (item) => categoryID === item?._id
-  )
+	// const [anyChanges, setAnyChanges] = useState(false)
+	const categoryListSelector = useSelector((state) => state.categoryList)
 
-  const onChangeHandler = (e) => {
-    // setAnyChanges(true)
+	const currentCategory = categoryListSelector?.find(
+		(item) => categoryID === item?._id
+	)
 
-    switch (e.target.name) {
-      case 'productName':
-        setProductName(e.target.value)
+	const onChangeHandler = (e) => {
+		// setAnyChanges(true)
 
-        break
-      case 'image':
-        // setImage(e.target.files[0])
-        setBulkProducts((prev) => {
-          const updatedBulkProducts = [...prev]
-          updatedBulkProducts[index].images = e.target.files[0]
+		console.log('onChangeHandler', e.target.name, e.target.value)
+		switch (e.target.name) {
+			case 'productName':
+				setProductName(e.target.value)
+				break
 
-          return updatedBulkProducts
-        })
-        break
+			case 'unique_id':
+				console.log('unique_id', e.target.value)
+				setUniqueId(e.target.value)
 
-      case 'price':
-        ONLY_FLOATING_POINT_HANDLER(e)
+				setBulkProducts((prev) => {
+					const updatedBulkProducts = [...prev]
+					updatedBulkProducts[index].unique_id = e.target.value
 
-        if (+e.target.value > 999999) {
-          toast.warning('Price should not be more than 999999', {
-            id: 'price',
-          })
-          e.target.value = e.target.value.slice(0, -1)
-        }
+					return updatedBulkProducts
+				})
+				break
 
-        setPrice(e.target.value)
-        break
-      default:
-        break
-    }
-  }
-  // const memoizedAnyChanges = useMemo(() => anyChanges, [anyChanges])
+			case 'image':
+				// setImage(e.target.files[0])
+				setBulkProducts((prev) => {
+					const updatedBulkProducts = [...prev]
+					updatedBulkProducts[index].images = e.target.files[0]
 
-  // useEffect(() => {
-  // 	if (memoizedAnyChanges) {
-  // 		console.log('anyChanges is now true')
-  // 	}
-  // }, [memoizedAnyChanges])
+					return updatedBulkProducts
+				})
+				break
 
-  const setSelectedTags = (tags) => {
-    // setSelectedTags function sets the selected tags in the state
-    setBulkProducts((prev) => {
-      const updatedBulkProducts = [...prev]
-      updatedBulkProducts[index].subcategories = tags
-      return updatedBulkProducts
-    })
-  }
+			case 'price':
+				ONLY_FLOATING_POINT_HANDLER(e)
 
-  return (
-    <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-      <Table.Cell className='w-1/4 min-w-1/5 font-medium '>
-        <div className='flex gap-4'>
-          <p className='flex justify-center items-center text-nowrap w-10'>
-            {index + 1}
-          </p>
+				if (+e.target.value > 999999) {
+					toast.warning('Price should not be more than 999999', {
+						id: 'price',
+					})
+					e.target.value = e.target.value.slice(0, -1)
+				}
 
-          <input
-            className='p-3'
-            name='productName'
-            disabled={item?.name}
-            onChange={onChangeHandler}
-            placeholder='Product name'
-            value={productName}
-            maxLength={50}
-          />
-        </div>
-      </Table.Cell>
+				setPrice(e.target.value)
+				break
+			default:
+				break
+		}
+	}
 
-      <Table.Cell className='w-fit'>
-        <input
-          className='w-full p-3'
-          name='visibility_status'
-          onChange={onChangeHandler}
-          disabled={true}
-          value={item?.prod_status ? 'Visible' : 'Hidden'}
-        />
-      </Table.Cell>
+	const setSelectedTags = (tags) => {
+		// setSelectedTags function sets the selected tags in the state
+		setBulkProducts((prev) => {
+			const updatedBulkProducts = [...prev]
+			updatedBulkProducts[index].subcategories = tags
+			return updatedBulkProducts
+		})
+	}
 
-      <Table.Cell className='w-fit'>
-        <input
-          className='w-full p-3'
-          name='price_To_Customer'
-          disabled={true}
-          value={item?.is_pricing ? 'Visible' : 'Hidden'}
-        />
-      </Table.Cell>
+	return (
+		<Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+			<Table.Cell className='w-1/4 min-w-1/5 font-medium '>
+				<div className='flex gap-4'>
+					<p className='flex justify-center items-center text-nowrap w-10'>
+						{index + 1}
+					</p>
 
-      <Table.Cell className='w-1/6'>
-        <input
-          className='w-full min-w-24 p-3'
-          name='price'
-          onChange={onChangeHandler}
-          disabled={item?.mrp_price}
-          placeholder='Price'
-          value={price}
-        ></input>
-      </Table.Cell>
+					<TextInput
+						required
+						name='productName'
+						disabled={item?.name}
+						onChange={onChangeHandler}
+						placeholder='Product name'
+						value={productName}
+						maxLength={PRODUCT_NAME_MAX_LENGTH}
+					/>
+				</div>
+			</Table.Cell>
 
-      <Table.Cell className='overflow-auto w-fit'>
-        {
-          // here this avatar rerenders on every change in
-        }
-        <Avatar.Group>
-          {item?.images.map((img, i) => (
-            <Avatar
-              className='object-fit'
-              img={URL.createObjectURL(img)}
-              rounded
-              stacked
-              key={i}
-            />
-          ))}
-        </Avatar.Group>
-      </Table.Cell>
+			{/* Product ID */}
+			<Table.Cell className='w-1/6'>
+				<TextInput
+					maxLength={20}
+					name='unique_id'
+					className='min-w-20'
+					value={uniqueId || ''}
+					placeholder='Unique ID'
+					disabled={item?.unique_id}
+					onChange={onChangeHandler}
+				/>
+			</Table.Cell>
 
-      <Table.Cell className='overflow-auto w-fit'>
-        <Tags
-          disabled={false}
-          selectedTags={item?.subcategories}
-          setSelectedTags={setSelectedTags}
-          tags={currentCategory?.subcategories}
-        />
-      </Table.Cell>
+			<Table.Cell className='w-fit'>
+				<input
+					required
+					className='w-full p-3'
+					name='visibility_status'
+					onChange={onChangeHandler}
+					disabled={true}
+					value={item?.prod_status ? 'Visible' : 'Hidden'}
+				/>
+			</Table.Cell>
 
-      <Table.Cell className='w-1/7'>
-        <MdOutlineDelete
-          color='red'
-          onClick={isProductsAdding ? null : onDelete}
-          className='hover:cursor-pointer hover:bg-gray-100 rounded p-1 text-3xl'
-        />
-      </Table.Cell>
-    </Table.Row>
-  )
-}
+			<Table.Cell className='w-fit'>
+				<input
+					required
+					disabled={true}
+					className='w-full p-3'
+					name='price_To_Customer'
+					value={item?.is_pricing ? 'Visible' : 'Hidden'}
+				/>
+			</Table.Cell>
+
+			<Table.Cell className='w-1/6'>
+				<TextInput
+					required
+					name='price'
+					value={price}
+					placeholder='Price'
+					onChange={onChangeHandler}
+					disabled={item?.mrp_price}
+					className='w-full min-w-24'
+				/>
+			</Table.Cell>
+
+			<Table.Cell className='overflow-auto w-fit'>
+				{
+					// here this avatar rerenders on every change in
+				}
+				<Avatar.Group>
+					{item?.images.map((img, i) => (
+						<Avatar
+							className='object-fit'
+							img={URL.createObjectURL(img)}
+							rounded
+							stacked
+							key={i}
+						/>
+					))}
+				</Avatar.Group>
+			</Table.Cell>
+
+			<Table.Cell className='overflow-auto w-fit'>
+				<Tags
+					disabled={false}
+					selectedTags={item?.subcategories}
+					setSelectedTags={setSelectedTags}
+					tags={currentCategory?.subcategories}
+				/>
+			</Table.Cell>
+
+			<Table.Cell className='w-1/8 pl-0'>
+				<MdOutlineDelete
+					color='red'
+					onClick={isProductsAdding ? null : onDelete}
+					className='hover:cursor-pointer hover:bg-gray-100 p-2 rounded text-3xl'
+					size={40}
+				/>
+			</Table.Cell>
+		</Table.Row>
+	)
+})
+
+export default BulkProductTableBody

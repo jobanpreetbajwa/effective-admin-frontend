@@ -1,17 +1,18 @@
-import { toast } from 'sonner'
+import { toast } from "sonner"
 
-const MAX_LIMIT = 999999
-const ONLY_NUMBERS = /^(0|[1-9][0-9]*)$/
-const ONLY_FLOATING_POINT_REGEX = /^[-+]?([0-9]+(\.[0-9]{0,2})?|\.[0-9]+)$/
+export const MAX_LIMIT = 999999
+export const ONLY_NUMBERS = /^(0|[1-9][0-9]*)$/
+export const ONLY_FLOATING_POINT_REGEX =
+	/^[-+]?([0-9]+(\.[0-9]{0,2})?|\.[0-9]+)$/
 
 //ONLY_FLOATING_POINT_HANDLER, which is a function used to handle input events (e) typically associated with input fields.
 //that validates only integers are allowed
 export const ONLY_NUMBERS_HANDLER = (e) => {
 	if (!ONLY_NUMBERS.test(e.target.value) && e.target.value) {
-		e.target.value = e.target.value.replace(/\D/g, '')
+		e.target.value = e.target.value.replace(/\D/g, "")
 
-		toast.warning('Only Integer is allowed', {
-			id: 'integer',
+		toast.warning("Only Integer is allowed", {
+			id: "integer",
 		})
 
 		return false
@@ -24,7 +25,7 @@ export const ONLY_NUMBERS_HANDLER = (e) => {
 
 export const ONLY_FLOATING_POINT_HANDLER = (e) => {
 	let inputValue = e.target.value
-	let filteredValue = ''
+	let filteredValue = ""
 
 	// Filter out invalid characters and keep only valid floating-point numbers
 	for (let i = 0; i < inputValue.length; i++) {
@@ -35,8 +36,8 @@ export const ONLY_FLOATING_POINT_HANDLER = (e) => {
 			filteredValue = testValue
 		} else {
 			// Display a warning toast notification for invalid input
-			toast.warning('Only numbers are allowed up to 2 decimal points', {
-				id: 'floating-point',
+			toast.warning("Only numbers are allowed up to 2 decimal points", {
+				id: "floating-point",
 			})
 		}
 	}
@@ -46,8 +47,8 @@ export const ONLY_FLOATING_POINT_HANDLER = (e) => {
 	if (numericValue > MAX_LIMIT) {
 		// Truncate the number to be within the limit
 		filteredValue = String(MAX_LIMIT)
-		toast.warning('The maximum allowed value is 999999', {
-			id: 'floating-point',
+		toast.warning("The maximum allowed value is 999999", {
+			id: "floating-point",
 		})
 	}
 

@@ -1,15 +1,16 @@
 import { toast } from 'sonner'
-import { Modal } from 'flowbite-react'
 import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { Button, FileInput } from 'flowbite-react'
+import { Button, FileInput, Modal } from 'flowbite-react'
 
 import Chips from '../../chips/chips'
 import ImageLabel from '../imageLabel/imageLabel'
 import CropperReact from '../../../cropper/cropperReact'
 import { editCollection } from '../../../../api/function'
 import BannerImagesComponent from './components/bannerImages'
+import ChangeTagNameModal from './components/changeTagNameModal'
+
 import { capitalizeFirstLetter } from '../../../../utils/function'
 import { sendMultipleImages } from '../../../utilis/sendMultipleImages'
 import { editCategoryListData } from '../../../../store/slices/categoryList'
@@ -17,10 +18,11 @@ import {
 	ADD_PRODUCT_ACTION_TYPE,
 	DELETE_ACTION_TYPE,
 } from '../../../staticData/constantActions'
+import { COLLECTION_NAME_MAX_LENGTH } from '../../../constant/products/constant'
 
 import { FaEdit } from 'react-icons/fa'
 import { CiCircleRemove } from 'react-icons/ci'
-import ChangeTagNameModal from './components/changeTagNameModal'
+import ReorderTags from './components/reorderTags'
 
 export default function EditCategory({
 	item,
@@ -54,10 +56,14 @@ export default function EditCategory({
 
 	const collectionInputRef = useRef(null)
 
-	const editTagNameIndex = useRef(null)
+	const [editTagNameIndex, setEditTagNameIndex] = useState(null)
+
 	const [editedTags, setEditedTags] = useState([])
 
 	const [openEditTagModal, setOpenEditTagModal] = useState(false)
+
+	const [openReorderModal, setOpenReorderModal] = useState(false)
+	const [reOrder, setReOrder] = useState([])
 
 	// Close the drawer
 	const closeHandler = () => {
@@ -159,14 +165,12 @@ export default function EditCategory({
 				bannerDelete: deletedBannerImages,
 				subcategoryName: subcategories,
 				editSubcategories: editedTags,
+				reOrder: reOrder?.filter((item) => deleted.indexOf(item) === -1),
 			}
 
 			if (collectionUploads.length) {
 				data.imageUpdate = collectionUploads
 			}
-
-			console.log('data', data)
-
 			const promise = editCollection({ id: item?._id, data: data })
 				.then((response) => {
 					const updated = {
@@ -174,6 +178,7 @@ export default function EditCategory({
 						subcategories: [...response.data?.subcategories],
 					}
 					dispatch(editCategoryListData(updated))
+
 					if (searchedList) {
 						setSearchedList((prev) => {
 							return prev?.map((item) => {
@@ -215,16 +220,16 @@ export default function EditCategory({
 		} catch (error) {
 			console.log('Error while editing category ', error)
 			setIsLoading(false)
+		} finally {
+			setIsLoading(false)
 		}
-		setIsLoading(false)
 	}
 
 	const handleTagNameChange = (index) => {
-		editTagNameIndex.current = index
+		setEditTagNameIndex(index)
 		setOpenEditTagModal(true)
 	}
 
-	console.log('editedTags', editedTags)
 	return (
 		<>
 			<ChangeTagNameModal
@@ -232,14 +237,23 @@ export default function EditCategory({
 				setTags={setTags}
 				setSubcategories={setSubcategories}
 				editedTags={editedTags}
-				index={editTagNameIndex.current}
+				index={editTagNameIndex}
 				openModal={openEditTagModal}
 				setEditedTags={setEditedTags}
 				setOpenModal={setOpenEditTagModal}
 			/>
+
+			<ReorderTags
+				tags={tags}
+				setTags={setTags}
+				setReOrder={setReOrder}
+				openReorderModal={openReorderModal}
+				setOpenReorderModal={setOpenReorderModal}
+			/>
+
 			<div
 				id='drawer-form'
-				className='fixed flex flex-col gap-4 top-0 right-0 z-40 h-full w-96 p-4 overflow-y-auto border-l drop-shadow bg-white cursor-auto  dark:bg-gray-800'
+				className='fixed flex flex-col gap-4 top-0 right-0 z-40 h-full w-[25rem] p-4 overflow-y-auto border-l drop-shadow bg-white cursor-auto  dark:bg-gray-800'
 				tabIndex='-1'
 				aria-labelledby='drawer-form-label'
 				onClick={(e) => e.stopPropagation()}
@@ -291,7 +305,7 @@ export default function EditCategory({
 							defaultValue={item?.category_name}
 							required
 							value={changedName}
-							maxLength={50}
+							maxLength={COLLECTION_NAME_MAX_LENGTH}
 							onChange={nameChangeHandler}
 							onBlur={() => {
 								setChangedName(capitalizeFirstLetter(changedName))
@@ -362,9 +376,19 @@ export default function EditCategory({
 					/>
 
 					<div className='mb-2 flex flex-col gap-1'>
-						<h2 className='text-sm font-medium leading-7 text-gray-900 '>
-							COLLECTION TAGS
-						</h2>
+						<div className='flex justify-between'>
+							<h2 className='text-sm font-medium leading-7 text-gray-900 '>
+								COLLECTION TAGS
+							</h2>
+
+							<Button
+								size='xs'
+								onClick={() => setOpenReorderModal(true)}
+								disabled={!tags?.length}
+							>
+								Reorder
+							</Button>
+						</div>
 
 						<div className='flex gap-2 flex-wrap  overflow-y-auto py-2'>
 							{tags?.map((item, i) => {
@@ -417,7 +441,7 @@ export default function EditCategory({
 						</div>
 					</div>
 					<div className='flex justify-between gap-2'>
-						<Button type='button' onClick={closeHandler} outline>
+						<Button type='button' color='gray' onClick={closeHandler}>
 							Cancel
 						</Button>
 

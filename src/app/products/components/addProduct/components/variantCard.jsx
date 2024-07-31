@@ -1,10 +1,12 @@
-import { Alert, Button, Label, TextInput } from 'flowbite-react'
+import { toast } from 'sonner'
+import { useRef, useState } from 'react'
+import { Alert, Button, TextInput } from 'flowbite-react'
+
 import Chips from '../../../chips/chips'
+import { PRODUCT_NAME_MAX_LENGTH } from '../../../../constant/products/constant'
+
 import { FaPencilAlt } from 'react-icons/fa'
 import { HiInformationCircle } from 'react-icons/hi'
-import { useRef } from 'react'
-import { useState } from 'react'
-import { toast } from 'sonner'
 
 // Helper function to filter unique objects based on their size property
 function filterUniqueObjects(arr) {
@@ -69,9 +71,9 @@ function VariantCard({ variantData, setVariantData, onCloseModal }) {
 				<div className='flex items-center gap-4'>
 					<TextInput
 						name='name'
-						placeholder='Enter Variant'
 						className='my-2'
-						maxLength={50}
+						placeholder='Enter Variant'
+						maxLength={PRODUCT_NAME_MAX_LENGTH}
 					/>
 				</div>
 

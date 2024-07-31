@@ -168,24 +168,24 @@ export const router = createBrowserRouter([
         element: <EditBulkPrice />,
       },
 
-      // {
-      //   path: '/orders',
-      //   errorElement: <ErrorBoundary />,
-      //   element: (
-      //     <React.Suspense fallback={<Loader />}>
-      //       <Orders />
-      //     </React.Suspense>
-      //   ),
-      // },
-      // {
-      //   path: '/orders/:orderID',
-      //   errorElement: <ErrorBoundary />,
-      //   element: (
-      //     <React.Suspense fallback={<Loader />}>
-      //       <OrderDetails />
-      //     </React.Suspense>
-      //   ),
-      // },
+      {
+        path: '/orders',
+        errorElement: <ErrorBoundary />,
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <Orders />
+          </React.Suspense>
+        ),
+      },
+      {
+        path: '/orders/:orderID',
+        errorElement: <ErrorBoundary />,
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <OrderDetails />
+          </React.Suspense>
+        ),
+      },
       {
         path: '/theme/list',
         element: (
@@ -202,24 +202,24 @@ export const router = createBrowserRouter([
           </React.Suspense>
         ),
       },
-      // {
-      //   path: '/reports',
-      //   errorElement: <ErrorBoundary />,
-      //   element: (
-      //     <React.Suspense fallback={<Loader />}>
-      //       <Reports />
-      //     </React.Suspense>
-      //   ),
-      // },
-      // {
-      //   path: '/customers',
-      //   errorElement: <ErrorBoundary />,
-      //   element: (
-      //     <React.Suspense fallback={<Loader />}>
-      //       <Customers />
-      //     </React.Suspense>
-      //   ),
-      // },
+      {
+        path: '/reports',
+        errorElement: <ErrorBoundary />,
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <Reports />
+          </React.Suspense>
+        ),
+      },
+      {
+        path: '/customers',
+        errorElement: <ErrorBoundary />,
+        element: (
+          <React.Suspense fallback={<Loader />}>
+            <Customers />
+          </React.Suspense>
+        ),
+      },
       {
         path: '/settings',
         errorElement: <ErrorBoundary />,

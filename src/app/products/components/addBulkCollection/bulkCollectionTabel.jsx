@@ -1,5 +1,7 @@
 import { Table, Avatar, TextInput } from 'flowbite-react'
 
+import { COLLECTION_NAME_MAX_LENGTH } from '../../../constant/products/constant'
+
 import { MdOutlineDelete } from 'react-icons/md'
 
 export default function BulkCollectionTabelBody({ item, onDelete, index }) {
@@ -15,7 +17,7 @@ export default function BulkCollectionTabelBody({ item, onDelete, index }) {
 							disabled={item?.collectionName}
 							placeholder='Collection name'
 							value={item?.collectionName}
-							maxLength={50}
+							maxLength={COLLECTION_NAME_MAX_LENGTH}
 						/>
 					</div>
 				</div>

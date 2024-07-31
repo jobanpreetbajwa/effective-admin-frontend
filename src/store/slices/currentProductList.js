@@ -6,8 +6,9 @@ const currentProductListSlice = createSlice({
 	reducers: {
 		syncProductList: (state, action) => {
 			const id = action.payload.id
-			state[id] = action.payload.element
+			return { ...state, [id]: action.payload.element }
 		},
+
 		updateProductStatus: (state, action) => {
 			const { _id, prod_status } = action.payload.data
 			const categoryID = action.payload.categoryID
@@ -131,8 +132,8 @@ const currentProductListSlice = createSlice({
 			state[id].products = element
 		},
 
-		clearProductList: (state) => {
-			return (state = {})
+		clearProductList: () => {
+			return {}
 		},
 	},
 })

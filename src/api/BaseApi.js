@@ -1,43 +1,51 @@
 import axios from 'axios'
-import statusCode from '../app/statusCodeErrors/statusCodeErrors'
 import { toast } from 'sonner'
+import statusCode from '../app/statusCodeErrors/statusCodeErrors'
 
-const makeApiCall = async (method, url, data = null, headers = {}) => {
-  const headersWithContentType = {
-    ...headers,
-  }
+const makeApiCall = async (
+	method,
+	url,
+	data = null,
+	headers = {},
+	cache = false
+) => {
+	const headersWithContentType = {
+		...headers,
+		'Cache-Control': cache ? 'max-age=15' : 'no-cache', // 15sec caching if `cache` is true
+	}
 
-  const config = {
-    method,
-    url,
-    headers: headersWithContentType,
-    ...(data !== null && { data }),
-  }
+	const config = {
+		method,
+		url,
+		headers: headersWithContentType,
+		...(data !== null && { data }),
+	}
 
-  try {
-    const response = await axios.request(config)
-    return response
-  } catch (error) {
-    if (error.response) {
-      const status = error.response.status
-      if (statusCode[status]) {
-        toast.error(statusCode[status], {
-          id: 'serverError',
-        })
-      } else {
-        // toast.error(`Unhandled status code: ${status}`, {
-        //   id: 'serverError',
-        // })
-      }
-    } else if (error.request) {
-      console.error('No response received:', error.request)
-      // Handle cases where no response was received
-    } else {
-      console.error('Error setting up the request:', error.message)
-      // Handle other Axios setup errors
-    }
-    return response
-  }
+	try {
+		const response = await axios.request(config)
+
+		return response
+	} catch (error) {
+		if (error?.response) {
+			const status = error?.response?.status
+			if (statusCode[status]) {
+				toast.error(statusCode[status], {
+					id: 'serverError',
+				})
+			} else {
+				// toast.error(`Unhandled status code: ${status}`, {
+				//   id: 'serverError',
+				// })
+			}
+		} else if (error.request) {
+			console.error('No response received:', error?.request)
+			// Handle cases where no response was received
+		} else {
+			console.error('Error setting up the request:', error?.message)
+			// Handle other Axios setup errors
+		}
+		throw error
+	}
 }
 
 export default makeApiCall

@@ -62,9 +62,9 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <ProtectedRoutes>
+     
         <App />
-      </ProtectedRoutes>
+   
     ),
     errorElement: <ErrorBoundary />,
     children: [

@@ -57,7 +57,7 @@ export default function CategorySection({
     const getCategoryList = async () => {
       try {
         setIsCategoryListLoading(true)
-
+        console.log('fetching category list')
         const response = await getCategory()
 
         setIsCategoryListLoading(false)

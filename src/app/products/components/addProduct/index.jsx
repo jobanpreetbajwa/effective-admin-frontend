@@ -12,18 +12,18 @@ import {
 
 import { updateCategoryItemsCount } from '../../../../store/slices/categoryList'
 
-import VariablePriceModal from '../../modal/variablePriceModal'
-
-import TagsComponent from './components/tags'
-import MediaComponent from './components/media'
-import MoreFields from './components/moreFields'
-import WeightComponent from './components/weight'
-import PricingComponent from './components/pricing'
-// import VariantComponent from './components/variants'
-import InventoryComponent from './components/inventory'
-import DescriptionComponent from './components/description'
 import NameAndStatusComponent from './components/nameAndStatus'
-import { urlArrayToBase64Array } from '../../../utilis/converters'
+import UniqueId from './components/uniqueId'
+import DescriptionComponent from './components/description'
+import MediaComponent from './components/media'
+import PricingComponent from './components/pricing'
+import VariablePriceModal from '../../modal/variablePriceModal'
+import InventoryComponent from './components/inventory'
+import WeightComponent from './components/weight'
+import TagsComponent from './components/tags'
+import MoreFields from './components/moreFields'
+
+// import VariantComponent from './components/variants'
 import { generateAddProductPayload } from './utils/generatePayload'
 import { sendMultipleImages } from '../../../utilis/sendMultipleImages'
 import {
@@ -44,58 +44,41 @@ import BackConfirmation from '../../modal/backConfirmation'
 
 export default function AddProduct({ action }) {
 	const dispatch = useDispatch()
-
 	const navigate = useNavigate()
 
+	const priceInputRef = useRef(null)
 	const { categoryID, productID } = useParams()
 
-	const [showModal, setShowModal] = useState(false)
-
-	const priceInputRef = useRef(null)
+	// const [showModal, setShowModal] = useState(false)
 
 	const [maxRange, setMaxRange] = useState([])
-
 	const [productData, setProductData] = useState({})
-
 	const [disabledTags, setDisabledTags] = useState(true)
-
 	const [variablePricing, setVariablePricing] = useState([])
-
 	const [variablePriceModal, setVariablePriceModal] = useState(false)
-
 	const categoryListSelector = useSelector((state) => state.categoryList)
-
 	const category = categoryListSelector.find((item) => item?._id === categoryID)
 
 	const [openVariantModal, setOpenVariantModal] = useState(false)
 
 	// ADD PRODUCT IMAGES ARRAY
-	const [images, setImages] = useState([])
+	// const [images, setImages] = useState([])
+	const [detailPageImages, setDetailPageImages] = useState([])
 
 	// EDIT PRODUCT IMAGES ARRAY
 	const [sendImages, setSendImages] = useState([])
 	const [showEditImage, setShowEditImage] = useState([])
-
 	const [showDiscountedPrice, setShowDiscountedPrice] = useState(
 		productID ? true : false
 	)
-
 	const [inventoryAvailable, setInventoryAvailable] = useState(true)
-
 	const [isPricing, setIsPricing] = useState(true)
-
 	const [variantData, setVariantData] = useState(productData?.variants || [])
-
 	const [deletedVariants, setDeletedVariants] = useState([])
-
 	const [tags, setTags] = useState([])
-
 	const [showTags, setShowTags] = useState([])
-
 	const [isLoading, setIsLoading] = useState(false)
-
 	const [selectedTags, setSelectedTags] = useState([])
-
 	const [deletedImages, setDeletedImages] = useState([])
 
 	const handleSubmit = async (event) => {
@@ -103,16 +86,10 @@ export default function AddProduct({ action }) {
 		setIsLoading(true)
 
 		// Media
-		if (!images.length) {
-			toast.error('Please upload an image')
-			setIsLoading(false)
-
-			return
-		}
 		if (
+			!sendImages.length &&
 			action === EDIT_PRODUCT_ACTION_TYPE &&
-			showEditImage.length === 0 &&
-			sendImages.length === 0
+			showEditImage.length === 0
 		) {
 			toast.error('Please upload an image')
 			setIsLoading(false)
@@ -266,7 +243,7 @@ export default function AddProduct({ action }) {
 					if (action === ADD_PRODUCT_ACTION_TYPE) {
 						event.target.reset()
 						setTags([])
-						setImages([])
+						// setImages([])
 						setMaxRange([])
 						setSendImages([])
 						setVariantData([])
@@ -305,14 +282,10 @@ export default function AddProduct({ action }) {
 				const res = response.data
 				const data = res?.product
 
-				const urlBase64 = await urlArrayToBase64Array(
-					data?.img_ids?.map((item) => item?.url)
-				)
-
 				setIsPricing(data?.is_pricing)
 				setDeletedImages(data?.img_ids)
-				setImages(urlBase64)
-				setShowEditImage(urlBase64)
+				setDetailPageImages(data?.img_ids?.map((item) => item?.url))
+				setShowEditImage(data?.img_ids?.map((item) => item?.url))
 				setSelectedTags(res?.subCategories)
 				setInventoryAvailable(data?.inventory_available)
 				//if data?.prices last array has "to" key === "Any" then remove it
@@ -382,7 +355,7 @@ export default function AddProduct({ action }) {
 	// 	  setShowModal(false)
 	// 	}
 	//   }
-	console.log(maxRange, 'max range')
+
 	return (
 		<>
 			{/* {showModal && (
@@ -503,6 +476,9 @@ export default function AddProduct({ action }) {
 										productData={productData}
 									/>
 
+									{/* Product Unique ID */}
+									<UniqueId action={action} productData={productData} />
+
 									{/* Product Description */}
 									<DescriptionComponent
 										action={action}
@@ -512,16 +488,16 @@ export default function AddProduct({ action }) {
 									{/* Media */}
 									<MediaComponent
 										action={action}
-										images={images}
-										setImages={setImages}
+										// images={images}
+										// setImages={setImages}
 										sendImages={sendImages}
 										deletedImages={deletedImages}
 										setSendImages={setSendImages}
 										showEditImage={showEditImage}
+										detailPageImages={detailPageImages}
 										setShowEditImage={setShowEditImage}
 										setDeletedImages={setDeletedImages}
 									/>
-
 									{/* Pricing */}
 									<PricingComponent
 										action={action}
@@ -538,7 +514,6 @@ export default function AddProduct({ action }) {
 										setVariablePriceModal={setVariablePriceModal}
 										setShowDiscountedPrice={setShowDiscountedPrice}
 									/>
-
 									{/* Inventory Management */}
 									<InventoryComponent
 										action={action}
@@ -546,10 +521,8 @@ export default function AddProduct({ action }) {
 										inventoryAvailable={inventoryAvailable}
 										setInventoryAvailable={setInventoryAvailable}
 									/>
-
 									{/* Weight */}
 									<WeightComponent action={action} productData={productData} />
-
 									{/* Variants */}
 									{/* <VariantComponent
 										action={action}
@@ -561,7 +534,6 @@ export default function AddProduct({ action }) {
 										deletedVariants={deletedVariants}
 										setDeletedVariants={setDeletedVariants}
 									/> */}
-
 									{/* TAGS */}
 									<TagsComponent
 										tags={tags}

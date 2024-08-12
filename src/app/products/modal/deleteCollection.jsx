@@ -43,10 +43,13 @@ export default function DeleteCollection({
             navigate('/products/')
           }
         }
+
         if (searchedList) {
-          setSearchedList((prev) => {
-            return prev?.filter((item) => item?._id !== id)
-          })
+          const tempList = Object.fromEntries(
+            Object.entries(searchedList).filter(([key, value]) => key !== id)
+          )
+          console.log(tempList)
+          setSearchedList(tempList)
         }
       })
       .catch((error) => {

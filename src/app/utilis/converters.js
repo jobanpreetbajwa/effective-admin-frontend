@@ -12,8 +12,8 @@ export function urlToBase64(url) {
 		xhr.onerror = function (error) {
 			reject(error)
 		}
-		xhr.open('GET', url)
-		xhr.responseType = 'blob'
+		xhr.open("GET", url)
+		xhr.responseType = "blob"
 		xhr.send()
 	})
 }
@@ -27,9 +27,20 @@ export async function urlArrayToBase64Array(urls) {
 
 			base64Array.push(base64String)
 		} catch (error) {
-			console.error('Error reading file:', error)
+			console.error("Error reading file:", error)
 		}
 	}
 
 	return base64Array
+}
+
+// Function to convert a base64 string to a File object
+export const base64ToFile = (base64, filename, mimeType) => {
+	const byteString = atob(base64)
+	const ab = new ArrayBuffer(byteString.length)
+	const ia = new Uint8Array(ab)
+	for (let i = 0; i < byteString.length; i++) {
+		ia[i] = byteString.charCodeAt(i)
+	}
+	return new File([ab], filename, { type: mimeType })
 }

@@ -2,7 +2,10 @@ import { toast } from 'sonner'
 import { Table, TextInput } from 'flowbite-react'
 
 import { ONLY_FLOATING_POINT_HANDLER } from '../../../../utilis/regex'
-import { MRP_PRICE_FIXED_VALUE } from '../../../../constant/products/constant'
+import {
+	MRP_PRICE_FIXED_VALUE,
+	PRODUCT_NAME_MAX_LENGTH,
+} from '../../../../constant/products/constant'
 
 export default function TableRow({
 	index,
@@ -43,11 +46,11 @@ export default function TableRow({
 			<Table.Cell className='flex items-center whitespace-nowrap w-full font-medium'>
 				<div className='text-center w-8 mr-16'>{index + 1}</div>
 				<TextInput
-					placeholder='Product name'
-					defaultValue={product?.name}
-					maxLength={50}
 					disabled
 					className='w-full'
+					placeholder='Product name'
+					defaultValue={product?.name}
+					maxLength={PRODUCT_NAME_MAX_LENGTH}
 				/>
 			</Table.Cell>
 

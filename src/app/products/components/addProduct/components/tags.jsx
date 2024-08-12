@@ -1,10 +1,12 @@
-import { Button, TextInput } from 'flowbite-react'
-import Chips from '../../../chips/chips'
 import { toast } from 'sonner'
 import { useDispatch } from 'react-redux'
-import { addNewSubcategoryIn_Category } from '../../../../../store/slices/categoryList'
+import { Button, TextInput } from 'flowbite-react'
+
+import Chips from '../../../chips/chips'
 import { addTagsInCategory } from '../../../../../api/function'
 import { DETAILS_PRODUCT_ACTION_TYPE } from '../../../../staticData/constantActions'
+import { addNewSubcategoryIn_Category } from '../../../../../store/slices/categoryList'
+
 export default function TagsComponent({
 	tags,
 	action,
@@ -31,11 +33,6 @@ export default function TagsComponent({
 			return
 		}
 
-		let headersList = {
-			Accept: '*/*',
-			'Content-Type': 'application/json',
-		}
-
 		let bodyContent = {
 			name: document.getElementById('tags').value,
 		}
@@ -52,7 +49,7 @@ export default function TagsComponent({
 	}
 
 	return (
-		<div className='col-span-6 pb-6 '>
+		<div className='col-span-6 pb-6'>
 			<h2 className='text-base font-semibold leading-7 text-gray-900'>Tags</h2>
 
 			<div className='my-4 flex flex-wrap gap-x-2 gap-y-1'>

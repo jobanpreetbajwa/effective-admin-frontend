@@ -3,50 +3,58 @@ import { MRP_PRICE_FIXED_VALUE } from '../../../../constant/products/constant'
 
 export default function ProductList({ product, index }) {
 	return (
-		<div className='grid grid-cols-8 place-items-center gap-6'>
-			<div className='col-span-1'>{index + 1}</div>
+		<tr className='border-b dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-600'>
+			<td className='px-6 py-4'>{index + 1}</td>
 
-			{product?.productId?.deletedAt ? (
-				<div className='col-span-3 flex gap-2 items-center w-full'>
-					<img
-						src={product?.productId?.img_ids[0]?.url}
-						alt={product?.productId?.name}
-						className='w-16 h-16'
-					/>
-					<div>
-						<p className='text-pretty'>
-							{product?.productId?.name}
-							<span className='text-rose-600'>{` (Deleted)`}</span>
-						</p>
-						<p>{`${product?.quantity} Quantity`}</p>
-					</div>
+			<td className='font-bold px-6 py-4'>
+				<div className=''>
+					{product?.productId?.deletedAt ? (
+						<div className='grid grid-cols-5 items-center gap-2'>
+							<div className='col-span-3 xl:col-span-2'>
+								<img
+									src={product?.productId?.img_ids?.[0]?.url}
+									alt={product?.productId?.name}
+									className='w-20 h-20 object-contain rounded bg-white dark:bg-neutral-800'
+								/>
+							</div>
+
+							<div className='col-span-2 xl:col-span-3 text-pretty'>
+								{product?.productId?.name}
+								<span className='text-rose-600'>{` (Deleted)`}</span>
+							</div>
+						</div>
+					) : (
+						<Link
+							to={`/products/${product?.productId?.category}/details/${product?.productId?._id}`}
+							className='grid grid-cols-5 items-center gap-2'
+						>
+							<div className='col-span-3 xl:col-span-2'>
+								<img
+									src={product?.productId?.img_ids?.[0]?.url}
+									alt={product?.productId?.name}
+									className='w-20 h-20 object-contain rounded bg-white dark:bg-neutral-800'
+								/>
+							</div>
+
+							<div className='col-span-2 xl:col-span-3  text-pretty'>
+								{product?.productId?.name}
+							</div>
+						</Link>
+					)}
 				</div>
-			) : (
-				<Link
-					to={`/products/${product?.productId?.category}/details/${product?.productId?._id}`}
-					className='col-span-3 flex gap-2 items-center w-full'
-				>
-					<img
-						src={product?.productId?.img_ids[0]?.url}
-						alt={product?.productId?.name}
-						className='w-16 h-16'
-					/>
-					<div>
-						<p className='text-pretty'>{product?.productId?.name}</p>
-						<p>{`${product?.quantity} Quantity`}</p>
-					</div>
-				</Link>
-			)}
+			</td>
 
-			<p className='col-span-2'>{`₹${
+			<td className='px-6 py-4'>{product?.productId?.unique_id || 'N/A'}</td>
+
+			<td className='px-6 py-4'>{`₹${
 				product?.price?.toFixed(MRP_PRICE_FIXED_VALUE) || ' N/A '
-			} x ${product?.quantity}`}</p>
+			} x ${product?.quantity}`}</td>
 
-			<p className='col-span-2 font-semibold'>
+			<td className='px-6 py-4 font-bold'>
 				₹
 				{(product?.price * product?.quantity).toFixed(MRP_PRICE_FIXED_VALUE) ||
 					' N/A '}
-			</p>
-		</div>
+			</td>
+		</tr>
 	)
 }

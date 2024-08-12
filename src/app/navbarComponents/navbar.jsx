@@ -35,12 +35,12 @@ export default function Navbar({ sidebar, setSideBar }) {
         id='drawer-navigation-label'
         className={`${
           sidebar ? 'hidden' : 'visible w-44'
-        } text-gray-500 uppercase dark:text-gray-400 font-medium rounded-lg text-sm text-center inline-flex items-center`}
+        } text-gray-500 uppercase dark:text-gray-400 font-medium rounded-lg text-sm text-center inline-flex `}
         onClick={dropdownHandler}
       >
-        Satya Tech Store
+        Tara Chand Sushil Kumar
         <svg
-          className='w-2.5 h-2.5 ms-3'
+          className='w-2.5 h-2.5 ms-3 mt-1'
           aria-hidden='true'
           xmlns='http://www.w3.org/2000/svg'
           fill='none'

@@ -1,5 +1,5 @@
 import { Draggable } from 'react-beautiful-dnd'
-import { Button } from 'flowbite-react'
+import { Button, TextInput } from 'flowbite-react'
 import { capitalizeFirstLetter } from '../../../../utils/function'
 import DragDrop from './DragDrop'
 
@@ -17,9 +17,8 @@ const CategoriesCollection = ({
 				<p className='p-1'>
 					{capitalizeFirstLetter(themeRender?.nav)} Collection Title
 				</p>
-				<input
+				<TextInput
 					type='text'
-					className='p-2 w-full rounded-md border border-blue-200'
 					name='title'
 					value={title}
 					onChange={(e) => handleTitleChange(e)}
@@ -28,6 +27,7 @@ const CategoriesCollection = ({
 					)} Collection Title`}
 				/>
 			</div>
+
 			<div className='p-6 bg-slate-100'>
 				<div
 					className='p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-100 dark:bg-gray-800 dark:text-blue-400 text-center'
@@ -35,6 +35,7 @@ const CategoriesCollection = ({
 				>
 					<p>You can reorder the {themeRender?.nav} by dragging and dropping</p>
 				</div>
+
 				<DragDrop moveItem={moveSelectedCategory}>
 					{themeOptionList ? (
 						themeOptionList?.map((item, index) => (
@@ -69,7 +70,7 @@ const CategoriesCollection = ({
 													className='me-2'
 													onClick={() => deleteCategory(item?._id)}
 												>
-													delete
+													Delete
 												</Button>
 											)}
 										</div>

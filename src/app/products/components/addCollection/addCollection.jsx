@@ -5,14 +5,14 @@ import { useDispatch } from 'react-redux'
 import ImageLabel from '../imageLabel/imageLabel'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button, FileInput, Label, TextInput } from 'flowbite-react'
-import { addCategoryToList } from '../../../../store/slices/categoryList'
-
-import { sendMultipleImages } from '../../../utilis/sendMultipleImages'
-import { DELETE_ACTION_TYPE } from '../../../staticData/constantActions'
 
 import CropperReact from '../../../cropper/cropperReact'
 import BackConfirmation from '../../modal/backConfirmation'
 import { capitalizeFirstLetter } from '../../../../utils/function'
+import { sendMultipleImages } from '../../../utilis/sendMultipleImages'
+import { addCategoryToList } from '../../../../store/slices/categoryList'
+import { DELETE_ACTION_TYPE } from '../../../staticData/constantActions'
+import { COLLECTION_NAME_MAX_LENGTH } from '../../../constant/products/constant'
 import {
 	addSingleCollection,
 	addTagsInCollection,
@@ -157,6 +157,7 @@ export default function AddCollection({ setAddCollection }) {
 				})
 				.catch((error) => {
 					setIsAddingCollection(false)
+
 					console.error('Error while creating collection:', error)
 					if (error.response?.data?.message === 'ALREADY_EXIST') {
 						throw new Error('Collection already exists')
@@ -170,6 +171,7 @@ export default function AddCollection({ setAddCollection }) {
 					setIsAddingCollection(false)
 					onCloseModal()
 					event.target.reset()
+
 					return 'Collection added successfully'
 				},
 				error: (err) => err || 'Error while creating new collection',
@@ -246,7 +248,7 @@ export default function AddCollection({ setAddCollection }) {
 							onBlur={() =>
 								setCollectionName(capitalizeFirstLetter(collectionName))
 							}
-							maxLength={50}
+							maxLength={COLLECTION_NAME_MAX_LENGTH}
 							required
 						/>
 					</div>

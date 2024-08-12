@@ -3,118 +3,116 @@ import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import { useEffect } from 'react'
 
 export default function ChangeTagNameModal({
-  tags,
-  index,
-  setTags,
-  openModal,
-  editedTags,
-  setOpenModal,
-  setEditedTags,
-  setSubcategories,
+	tags,
+	index,
+	setTags,
+	openModal,
+	editedTags,
+	setOpenModal,
+	setEditedTags,
+	setSubcategories,
 }) {
-  function onCloseModal() {
-    setOpenModal(false)
-  }
-  const [newName, setNewName] = useState(null)
+	function onCloseModal() {
+		setOpenModal(false)
+	}
 
-  // useEffect(() => {
-  // 	if (newName === null) {
-  // 		setNewName(tags[index]?.name)
-  // 	}
-  // })
+	const [newName, setNewName] = useState(tags[index]?.name || '')
 
-  const handleTagNameChange = () => {
-    // handle tag name change in editedTags
-    const name = newName.trim()
-    // If the tag is already added in the collection edit based on _id
-    if (tags[index]?._id) {
-      const tagToUpdate = tags[index]
-      const existingTagIndex = editedTags?.findIndex(
-        (tag) => tag._id === tagToUpdate._id
-      )
+	useEffect(() => {
+		setNewName(tags[index]?.name)
+	}, [index])
 
-      let updatedTags
-      if (existingTagIndex !== -1 && existingTagIndex !== undefined) {
-        // Update the existing tag
-        updatedTags = editedTags.map((tag) =>
-          tag._id === tagToUpdate._id ? { ...tag, name: name } : tag
-        )
-      } else {
-        // Add the new tag
-        updatedTags = editedTags
-          ? [...editedTags, { ...tagToUpdate, name: name }]
-          : [{ ...tagToUpdate, name: name }]
-      }
+	const handleTagNameChange = () => {
+		// handle tag name change in editedTags
+		const name = newName.trim()
+		// If the tag is already added in the collection edit based on _id
+		if (tags[index]?._id) {
+			const tagToUpdate = tags[index]
+			const existingTagIndex = editedTags?.findIndex(
+				(tag) => tag._id === tagToUpdate._id
+			)
 
-      console.log('Updated Tags:', updatedTags)
-      setEditedTags(updatedTags)
-    } else {
-      //Check if new added tag is modified
-      setSubcategories((prev) => {
-        const updatedSubcategories = prev?.map((name) => {
-          if (name === tags[index]?.name) {
-            return name
-          } else {
-            return name
-          }
-        })
-        // console.log('Updated Subcategories:', updatedSubcategories)
-        return updatedSubcategories
-      })
-    }
+			let updatedTags
+			if (existingTagIndex !== -1 && existingTagIndex !== undefined) {
+				// Update the existing tag
+				updatedTags = editedTags.map((tag) =>
+					tag._id === tagToUpdate._id ? { ...tag, name: name } : tag
+				)
+			} else {
+				// Add the new tag
+				updatedTags = editedTags
+					? [...editedTags, { ...tagToUpdate, name: name }]
+					: [{ ...tagToUpdate, name: name }]
+			}
 
-    //change the current tag name
-    const newTagData = tags?.map((tag, i) => {
-      if (i === index) {
-        return { ...tag, name: newName }
-      }
-      return tag
-    })
+			setEditedTags(updatedTags)
+		} else {
+			//Check if new added tag is modified
+			setSubcategories((prev) => {
+				const updatedSubcategories = prev?.map((name) => {
+					if (name === tags[index]?.name) {
+						return name
+					} else {
+						return name
+					}
+				})
+				// console.log('Updated Subcategories:', updatedSubcategories)
+				return updatedSubcategories
+			})
+		}
 
-    setTags(newTagData)
+		//change the current tag name
+		const newTagData = tags?.map((tag, i) => {
+			if (i === index) {
+				return { ...tag, name: newName }
+			}
+			return tag
+		})
 
-    setOpenModal(false)
-  }
+		setTags(newTagData)
 
-  return (
-    <>
-      <Modal
-        show={openModal}
-        size='md'
-        onClose={onCloseModal}
-        popup
-        onClick={(e) => e.stopPropagation()}
-        className='p-4'
-      >
-        <Modal.Header>Change tag name of {tags[index]?.name}</Modal.Header>
+		setOpenModal(false)
+	}
 
-        <Modal.Body>
-          <div>
-            <Label htmlFor='newName' value='Change Tag Name :' />
+	return (
+		<>
+			<Modal
+				show={openModal}
+				size='md'
+				onClose={onCloseModal}
+				popup
+				onClick={(e) => e.stopPropagation()}
+				className='p-4'
+			>
+				<Modal.Header>Change tag name of {tags[index]?.name}</Modal.Header>
 
-            <TextInput
-              id='newName'
-              // value={newName}
-              placeholder='Enter new tag name'
-              onChange={(e) => {
-                if (newName?.length > 0) {
-                  setNewName(e.target.value)
-                } else {
-                  setNewName(e.target.value.trim())
-                }
-              }}
-            />
+				<Modal.Body>
+					<div>
+						<Label htmlFor='newName' value='Change Tag Name :' />
 
-            <Button
-              disabled={newName ? false : true}
-              onClick={handleTagNameChange}
-              className='mt-2'
-            >
-              Save
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
-    </>
-  )
+						<TextInput
+							id='newName'
+							value={newName}
+							placeholder='Enter new tag name'
+							onChange={(e) => {
+								if (newName?.length > 0) {
+									setNewName(e.target.value)
+								} else {
+									setNewName(e.target.value.trim())
+								}
+							}}
+						/>
+
+						<Button
+							disabled={newName ? false : true}
+							onClick={handleTagNameChange}
+							className='mt-2'
+						>
+							Save
+						</Button>
+					</div>
+				</Modal.Body>
+			</Modal>
+		</>
+	)
 }

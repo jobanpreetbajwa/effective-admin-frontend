@@ -191,14 +191,24 @@ export default function ThemeOptions() {
 	// Move Selected Category
 	const moveSelectedCategory = async (result, reviews) => {
 		let response = null
-		if (reviews) {
+
+		if (!result || !result.destination) return
+
+		if (themeRender.nav === 'products') {
+			const { source, destination } = result
+			const items = Array.from(themeOptionList)
+			const [reorderedItem] = items.splice(source.index, 1)
+			items.splice(destination.index, 0, reorderedItem)
+
+			response = items
+		} else if (themeRender.nav === 'reviews') {
 			response = moveItem(reviews, result)
 		} else {
 			response = moveItem(themeOptionList, result)
 		}
 
 		if (response) {
-			if (reviews) {
+			if (themeRender.nav === 'reviews') {
 				dispatch({ type: 'SET_REVIEWS', payload: response })
 			} else {
 				dispatch({ type: 'SET_THEME_OPTION_LIST', payload: response })

@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 import ToggleSwitch from '../../components/toggleSwitch'
 import { Textarea } from 'flowbite-react'
 
-export default function PaymentDetails({ formData, setFormData }) {
+export default function PaymentDetails({ formData, handleInputChange }) {
 	// Function to check if all payment modes are disabled and show error
 	const isAllClicked = (e) => {
 		if (e.target.name === 'online_payment') {
@@ -48,7 +48,12 @@ export default function PaymentDetails({ formData, setFormData }) {
 	const handleCheckboxChange = (e) => {
 		// Check if all payment modes are disabled then set the checked value
 		!isAllClicked(e) &&
-			setFormData({ ...formData, [e.target.name]: !formData?.[e.target.name] })
+			handleInputChange({
+				target: {
+					name: e.target.name,
+					value: !formData?.[e.target.name] ? 1 : 0,
+				},
+			})
 	}
 
 	return (
@@ -72,14 +77,10 @@ export default function PaymentDetails({ formData, setFormData }) {
 					<Textarea
 						maxLength={180}
 						className='mt-2'
+						name='online_payment_desc'
+						onChange={handleInputChange}
 						value={formData?.online_payment_desc}
 						placeholder='Online Payment Description'
-						onChange={(e) =>
-							setFormData({
-								...formData,
-								online_payment_desc: e.target.value,
-							})
-						}
 					/>
 				</div>
 
@@ -96,14 +97,10 @@ export default function PaymentDetails({ formData, setFormData }) {
 					<Textarea
 						maxLength={180}
 						className='mt-2'
+						name='cash_on_delivery_desc'
+						onChange={handleInputChange}
 						value={formData?.cash_on_delivery_desc}
 						placeholder='Cash On Delivery Description'
-						onChange={(e) =>
-							setFormData({
-								...formData,
-								cash_on_delivery_desc: e.target.value,
-							})
-						}
 					/>
 				</div>
 
@@ -120,14 +117,10 @@ export default function PaymentDetails({ formData, setFormData }) {
 					<Textarea
 						maxLength={180}
 						className='mt-2'
+						name='settle_offline_desc'
+						onChange={handleInputChange}
 						value={formData?.settle_offline_desc}
 						placeholder='Offline Settlement Description'
-						onChange={(e) =>
-							setFormData({
-								...formData,
-								settle_offline_desc: e.target.value,
-							})
-						}
 					/>
 				</div>
 			</div>

@@ -1,6 +1,7 @@
 import { TextInput, Label, Radio } from 'flowbite-react'
 
 import { capitalizeFirstLetter } from '../../../../../utils/function'
+import { PRODUCT_NAME_MAX_LENGTH } from '../../../../constant/products/constant'
 
 import {
 	ADD_PRODUCT_ACTION_TYPE,
@@ -20,9 +21,9 @@ export default function NameAndStatusComponent({ action, productData }) {
 					required
 					id='name'
 					type='text'
-					maxLength={50}
 					className='w-96'
 					placeholder='Product Name'
+					maxLength={PRODUCT_NAME_MAX_LENGTH}
 					disabled={action === DETAILS_PRODUCT_ACTION_TYPE}
 					defaultValue={productData ? productData?.name : ''}
 					onBlur={(e) =>

@@ -9,12 +9,8 @@ export default function BasicDetails({
 	logoImageSend,
 	setLogoImageSend,
 	handleInputChange,
+	handleImageChange,
 }) {
-	// Function to handle the image upload and set the image to the state
-	const handleImageChange = (e) => {
-		setLogoImageSend(e.target.files[0])
-	}
-
 	return (
 		<div className='p-4 sm:p-6 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700  dark:bg-gray-800'>
 			<h3 className='mb-4 text-xl font-semibold dark:text-white'>

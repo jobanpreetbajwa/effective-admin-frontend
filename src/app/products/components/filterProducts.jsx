@@ -22,9 +22,9 @@ const DropdownList = ({ tag, handleTagChange, filterTags }) => {
 }
 
 function FilterProducts({
-	searchedItem,
 	tags,
 	filterTags,
+	searchedItem,
 	setFilterTags,
 	allFilterTags,
 	setAllFilterTags,

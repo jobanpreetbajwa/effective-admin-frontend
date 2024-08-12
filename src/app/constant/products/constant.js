@@ -1,1 +1,9 @@
+export const PRODUCTS_FETCH_LIMIT = 20
+
 export const MRP_PRICE_FIXED_VALUE = 2
+
+export const PRODUCT_NAME_MAX_LENGTH = 100
+
+export const COLLECTION_NAME_MAX_LENGTH = 100
+
+export const PRODUCT_UNIQUE_ID_MAX_LENGTH = 100

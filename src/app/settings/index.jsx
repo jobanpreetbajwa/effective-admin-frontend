@@ -9,6 +9,8 @@ import SocialAccounts from './components/socialAccounts'
 import GeneralSettings from './components/generalSettings'
 import { sendMultipleImages } from '../utilis/sendMultipleImages'
 import { getSettingsData, updateSettingsData } from '../../api/function'
+import ShowPrice_onStatus from './components/showPrice_onStatus'
+import OrderSettings from './components/orderSettings'
 
 export default function Settings() {
 	// State to store the form data
@@ -36,7 +38,11 @@ export default function Settings() {
 		online_payment_desc: '',
 		cash_on_delivery_desc: '',
 		settle_offline_desc: '',
+		price_status_toggle: [],
+		orders_allowed: 1,
 	})
+
+	const [isChange, setIsChange] = useState(false)
 
 	// State to store the loading status
 	const [isLoading, setIsLoading] = useState(false)
@@ -82,8 +88,16 @@ export default function Settings() {
 			error: "Couldn't update profile!",
 			finally: () => {
 				setIsLoading(false)
+				setIsChange(false)
 			},
 		})
+	}
+
+	// Function to handle the image upload and set the image to the state
+	const handleImageChange = (event) => {
+		setLogoImageSend(event.target.files[0])
+
+		setIsChange(true)
 	}
 
 	// Function to handle the input change
@@ -93,6 +107,15 @@ export default function Settings() {
 			...formData,
 			[name]: value,
 		})
+		setIsChange(true)
+	}
+
+	const handleStatusChange = (statusArray) => {
+		setFormData({
+			...formData,
+			price_status_toggle: [...statusArray],
+		})
+		setIsChange(true)
 	}
 
 	// Fetch the Settings Data from the API and Update the State
@@ -124,7 +147,7 @@ export default function Settings() {
 							Store Profile
 						</h1>
 						<div className='col-span-6 sm:col-full'>
-							<Button type='submit' disabled={isLoading}>
+							<Button type='submit' disabled={isLoading || !isChange}>
 								Save Changes
 							</Button>
 						</div>
@@ -140,6 +163,7 @@ export default function Settings() {
 						logoImageSend={logoImageSend}
 						setLogoImageSend={setLogoImageSend}
 						handleInputChange={handleInputChange}
+						handleImageChange={handleImageChange}
 					/>
 
 					<StorePolicies
@@ -147,7 +171,11 @@ export default function Settings() {
 						handleInputChange={handleInputChange}
 					/>
 
-					<PaymentDetails formData={formData} setFormData={setFormData} />
+					<PaymentDetails
+						formData={formData}
+						setFormData={setFormData}
+						handleInputChange={handleInputChange}
+					/>
 				</div>
 
 				{/* Right Content */}
@@ -158,6 +186,15 @@ export default function Settings() {
 					/>
 
 					<GeneralSettings
+						formData={formData}
+						handleInputChange={handleInputChange}
+					/>
+					<ShowPrice_onStatus
+						price_status_toggle={formData?.price_status_toggle}
+						handleStatusChange={handleStatusChange}
+					/>
+
+					<OrderSettings
 						formData={formData}
 						handleInputChange={handleInputChange}
 					/>

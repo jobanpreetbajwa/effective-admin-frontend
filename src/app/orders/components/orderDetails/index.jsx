@@ -106,7 +106,7 @@ export default function OrderDetails() {
 				let allTotal = 0
 
 				response?.data?.items.forEach((product) => {
-					const totalPrice = product?.price * product.quantity
+					const totalPrice = product?.productId?.mrp_price * product.quantity
 
 					allTotal = allTotal + totalPrice
 				})

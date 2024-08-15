@@ -65,7 +65,7 @@ export default function OrderList({
 	}
 
 	const startIndex = (currentPage - 1) * LIMIT
-
+	console.log('order', order)
 	return (
 		<>
 			<Table.Row

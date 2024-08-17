@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { MRP_PRICE_FIXED_VALUE } from '../../../../constant/products/constant'
 
 export default function ProductList({ product, index }) {
-	console.log(product)
+
 	return (
 		<tr className='border-b dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-600'>
 			<td className='px-6 py-4'>{index + 1}</td>
@@ -46,7 +46,7 @@ export default function ProductList({ product, index }) {
 			</td>
 
 			<td className='px-6 py-4'>{product?.productId?._id || 'N/A'}</td>
-
+			<td className='px-6 py-4'>{product?.size?.size || 'N/A'}</td>
 			<td className='px-6 py-4'>{`₹${
 				product?.productId.mrp_price?.toFixed(MRP_PRICE_FIXED_VALUE) || ' N/A '
 			} x ${product?.quantity}`}</td>

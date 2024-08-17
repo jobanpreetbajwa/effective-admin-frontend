@@ -75,7 +75,9 @@ export default function ProductTable({ orderDetails, isLoading, total }) {
 								/>
 							</div>
 						</th>
-
+						<th scope='col' className='px-6 py-4'>
+							Sizes
+						</th>
 						<th scope='col' className='text-wrap px-6 py-4'>
 							<div className='flex items-center gap-1 '>
 								Price & Quantity

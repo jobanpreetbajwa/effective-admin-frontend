@@ -10,10 +10,12 @@ export const generateAddProductPayload = async (
 	sendImages,
 	categoryID,
 	deletedImages,
-	variablePricing
+	variablePricing,
+	sizes,
+	deletedSizesIds,
 ) => {
 	const raw = {
-		size: null,
+		size: sizes,
 		color: null,
 		name: event.target.name.value || '',
 		unique_id: event.target.unique_id.value || '',
@@ -38,6 +40,9 @@ export const generateAddProductPayload = async (
 		// shipping_cost: +event.target.shipping_cost.value || '',
 		prod_status: event?.target?.prod_status?.value || true,
 		category_id: categoryID,
+	}
+	if(action === EDIT_PRODUCT_ACTION_TYPE){
+		raw['deletedSizesIds'] = deletedSizesIds
 	}
 	const img_ids = await sendMultipleImages(sendImages)
 

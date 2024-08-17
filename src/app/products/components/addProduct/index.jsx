@@ -41,6 +41,7 @@ import {
 } from '../../../../api/function'
 
 import BackConfirmation from '../../modal/backConfirmation'
+import Sizing from './components/sizing'
 
 export default function AddProduct({ action }) {
 	const dispatch = useDispatch()
@@ -80,10 +81,20 @@ export default function AddProduct({ action }) {
 	const [isLoading, setIsLoading] = useState(false)
 	const [selectedTags, setSelectedTags] = useState([])
 	const [deletedImages, setDeletedImages] = useState([])
+	const [sizes, setSizes] = useState([])
+	const [deletedSizesIds, setDeletedSizesIds] = useState([])
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
 		setIsLoading(true)
+
+		//Sizes
+		if (sizes.length === 0) {
+			toast.error('Please add sizes')
+			setIsLoading(false)
+			return
+		}
+
 
 		// Media
 		if (
@@ -117,7 +128,9 @@ export default function AddProduct({ action }) {
 			sendImages,
 			categoryID,
 			deletedImages,
-			variablePricing
+			variablePricing,
+			sizes,
+			deletedSizesIds
 		)
 
 		const addVariantDataInPayload = (variant, rawData) => {
@@ -249,6 +262,7 @@ export default function AddProduct({ action }) {
 						setVariantData([])
 						setSelectedTags([])
 						setVariablePricing([])
+						setSizes([])
 					}
 
 					return action === ADD_PRODUCT_ACTION_TYPE
@@ -321,49 +335,10 @@ export default function AddProduct({ action }) {
 		})
 	}
 
-	// const isEmpty = () => {
-	// 	if (
-	// 	  collectionName ||
-	// 	  sendImages?.length ||
-	// 	  bannerImage?.length ||
-	// 	  Object.keys(collectionTags).length
-	// 	) {
-	// 	  console.log(
-	// 		sendImages?.length,
-	// 		'image',
-	// 		bannerImage?.length,
-	// 		'banner',
-	// 		Object.keys(collectionTags).length
-	// 	  )
-	// 	  return false
-	// 	} else {
-	// 	  return true
-	// 	}
-	//   }
-	//   const navigateHandler = () => {
-	// 	if (!isEmpty()) {
-	// 	  console.log('not empty')
-	// 	  setShowModal(true)
-	// 	} else {
-	// 	  navigate(-1)
-	// 	}
-	//   }
-	//   const handleModalConfirm = (confirmed) => {
-	// 	if (confirmed) {
-	// 	  navigate(-1)
-	// 	} else {
-	// 	  setShowModal(false)
-	// 	}
-	//   }
+
 
 	return (
 		<>
-			{/* {showModal && (
-        <BackConfirmation
-          openModal={showModal}
-          onConfirm={handleModalConfirm}
-        />
-      )} */}
 			{variablePriceModal && (
 				<VariablePriceModal
 					variablePricing={variablePricing}
@@ -534,6 +509,12 @@ export default function AddProduct({ action }) {
 										deletedVariants={deletedVariants}
 										setDeletedVariants={setDeletedVariants}
 									/> */}
+									{/* Sizes */}
+									<Sizing 
+									action={action} 
+									productData={productData} 
+									setSizes={setSizes} 
+									setDeletedSizesIds={setDeletedSizesIds}/>
 									{/* TAGS */}
 									<TagsComponent
 										tags={tags}

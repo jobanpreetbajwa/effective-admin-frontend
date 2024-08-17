@@ -1,0 +1,6 @@
+export const ORDERS_STATUS_PENDING = 0
+export const ORDERS_STATUS_DELIVERED = 1
+export const ORDERS_STATUS_CANCELLED = 2
+export const ORDERS_STATUS_SHIPPED = 3
+export const ORDERS_STATUS_RETURNED = 4
+export const ORDERS_STATUS_INPROGRESS = 5

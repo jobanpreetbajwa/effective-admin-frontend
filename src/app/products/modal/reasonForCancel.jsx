@@ -23,10 +23,11 @@ export default function ReasonForCancel({
 	const handleReason = () => {
 		let promise = null
 		if (typeof id === 'string') {
-			promise = singleOrderStatus({
-				orderID: id,
-				data: { cancellation_reason: reason },
-			})
+			// promise = singleOrderStatus({
+			// 	orderID: id,
+			// 	data: { cancellation_reason: reason },
+			// })
+			promise = addAdminNote({ orderID:id,data : {note: reason} })
 				.then((response) => {
 					reasonHandler()
 					setOpenModal(false)
@@ -40,22 +41,22 @@ export default function ReasonForCancel({
 				status: 2,
 				msg: reason,
 			}
+			console.log(data)
+			// promise = changeBulkOrderStatus(data)
+			// 	.then(() => {
+			// 		reasonHandler()
+			// 	})
+			// 	.catch((error) => {
+			// 		console.error(error)
+			// 	})
 
-			promise = changeBulkOrderStatus(data)
-				.then(() => {
-					reasonHandler()
-				})
-				.catch((error) => {
-					console.error(error)
-				})
-
-			toast.promise(promise, {
-				loading: 'Updating...',
-				success: () => {
-					return 'Updated'
-				},
-				error: 'Error',
-			})
+			// toast.promise(promise, {
+			// 	loading: 'Updating...',
+			// 	success: () => {
+			// 		return 'Updated'
+			// 	},
+			// 	error: 'Error',
+			// })
 		}
 	}
 

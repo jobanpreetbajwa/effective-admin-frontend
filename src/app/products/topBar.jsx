@@ -29,6 +29,7 @@ import {
 } from '../../store/slices/currentProductList'
 
 import { FaEye } from 'react-icons/fa'
+import ApplyOffers from './modal/applyOffers'
 
 export default function TopBar({
 	limit,
@@ -57,6 +58,8 @@ export default function TopBar({
 	const [tempProductList, setTempProductList] = useState(null)
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
 	const [tempCategoryList, setTempCategoryList] = useState(null)
+
+	const [offersModal, setOffersModal] = useState(false)
 
 	//debounce function returns a debounced version of a given function, delaying its execution until after a specified wait time has passed since the last invocation.
 	const debounce = (func, delay) => {
@@ -316,8 +319,27 @@ export default function TopBar({
 		setTempProductList(null)
 	}
 
+	const handleOffers = () => {
+		// if (allProductSelected) {
+		// 	navigate('/products/apply-offers', {
+		// 		state: productListSelector[categoryID]?.products,
+		// 	})
+		// } else {
+		// 	navigate('/products/apply-offers', { state: selectedProductsData })
+		// }
+		setOffersModal(true)
+	}
+
 	return (
 		<>
+		{
+			offersModal && (
+				<ApplyOffers
+					openModal={offersModal}
+					setOpenModal={setOffersModal}
+				/>
+			)
+		}
 			{showDeleteModal && (
 				<BulkDeleteProducts
 					openModal={showDeleteModal}
@@ -349,6 +371,7 @@ export default function TopBar({
 					<div className='flex gap-1 flex-nowrap h-full items-center'>
 						{/* <EditButtons /> */}
 
+						<Button onClick={handleOffers}>Apply Offers</Button>
 						<Button onClick={handleBulkEditPrice}>Bulk Edit Price</Button>
 
 						<Button
@@ -394,11 +417,11 @@ export default function TopBar({
 								</Link>
 							</Dropdown.Item>
 
-							<Link to={`/products/${categoryID}/Add-bulk-collection`}>
+							{/* <Link to={`/products/${categoryID}/Add-bulk-collection`}>
 								<Dropdown.Item className='hover:cursor-pointer '>
 									Bulk Collection
 								</Dropdown.Item>
-							</Link>
+							</Link> */}
 						</Dropdown>
 
 						<Dropdown
@@ -413,11 +436,11 @@ export default function TopBar({
 								</Dropdown.Item>
 							</Link>
 
-							<Link to={`/products/${categoryID}/add-bulk-product`}>
+							{/* <Link to={`/products/${categoryID}/add-bulk-product`}>
 								<Dropdown.Item className='hover:cursor-pointer '>
 									Bulk Products
 								</Dropdown.Item>
-							</Link>
+							</Link> */}
 						</Dropdown>
 					</div>
 				)}

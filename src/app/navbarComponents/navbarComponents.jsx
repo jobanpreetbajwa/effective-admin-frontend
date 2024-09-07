@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { GoPeople } from 'react-icons/go'
 import { CiSettings } from 'react-icons/ci'
+import { BiSolidOffer } from "react-icons/bi";
 import { TiMessages } from 'react-icons/ti'
 export default function NavbarComponents({ sidebar }) {
 	return (
@@ -170,6 +171,25 @@ export default function NavbarComponents({ sidebar }) {
           </span>
         </div>
       </NavLink> */}
+	  		<NavLink
+				to='/create_offers'
+				className={({ isActive }) => {
+					const activeStyle = isActive
+						? 'bg-slate-200 '
+						: 'hover:bg-slate-100 hover:cursor-pointer '
+
+					return `text-slate-900 rounded-lg w-full dark:text-white group ${activeStyle}`
+				}}
+			>
+				<div className='flex gap-2 items-center p-2 text-slate-900 rounded-lg hover:cursor-pointer dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group'>
+					<BiSolidOffer size={24} />
+					<span
+						className={`${sidebar ? 'hidden' : 'visible'} whitespace-nowrap`}
+					>
+						Offers
+					</span>
+				</div>
+			</NavLink>
 			<NavLink
 				to='/settings'
 				className={({ isActive }) => {

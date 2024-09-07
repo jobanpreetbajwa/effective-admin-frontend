@@ -1,5 +1,6 @@
 import { IoIosKeypad } from 'react-icons/io'
 import { FaQuoteRight } from 'react-icons/fa'
+import { BiSolidOffer } from "react-icons/bi";
 import { MdOutlineSlideshow, MdReviews, MdCollections } from 'react-icons/md'
 
 export const ThemeType = {
@@ -8,6 +9,7 @@ export const ThemeType = {
 	SLIDESHOW: 3,
 	TAGLINE: 4,
 	REVIEWS: 5,
+	OFFERS: 6,
 }
 
 export const theme = [
@@ -16,6 +18,7 @@ export const theme = [
 	{ type: 3, nav: 'slideshow' },
 	{ type: 4, nav: 'tagline' },
 	{ type: 5, nav: 'reviews' },
+	{ type: 6, nav: 'offers' },
 ]
 
 export const themeOptions = [
@@ -44,4 +47,9 @@ export const themeOptions = [
 		title: 'Reviews',
 		nav: 'reviews',
 	},
+	{
+		Icon: BiSolidOffer,
+		title: 'Offers',
+		nav: 'offers',
+	}
 ]

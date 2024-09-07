@@ -18,6 +18,7 @@ export const initialState = {
 	selectedCategoryId: '',
 	selectedBannerId: '',
 	selectedBannerCategoryId: [],
+	offers:[],
 }
 
 export const reducer = (state, action) => {
@@ -70,7 +71,11 @@ export const reducer = (state, action) => {
 				...state,
 				selectedBannerCategoryId: action.payload,
 			}
-
+		case 'SET_OFFERS':
+			return {
+				...state,
+				offers: action.payload,
+			}
 		default:
 			return state
 	}

@@ -367,6 +367,23 @@ export const postOrderStatusMessageData = async ({ data, id }) => {
 	return await makeApiCall('PATCH', url, data, headers)
 }
 
+export const createOffer = async (data) => {
+	const url = `${VITE_BASE_URL}/offers/create`
+
+	return await makeApiCall('POST', url, data, headers)
+}
+export const getOffersList = async () => {
+	const url = `${VITE_BASE_URL}/offers`
+
+	return await makeApiCall('GET', url, headers)
+}
+
+export const bindOfferWithProducts = async ({offerId,productIds}) => {
+	const url = `${VITE_BASE_URL}/offers/bind-products/${offerId}`
+
+	return await makeApiCall('POST', url, productIds, headers)
+}
+
 export {
 	fetchMoreProducts,
 	deleteBulkProduct,

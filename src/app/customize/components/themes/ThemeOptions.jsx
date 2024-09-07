@@ -21,7 +21,9 @@ import { sendMultipleImagesSlideShow } from '../../../utilis/sendMultipleImagesS
 import CategoriesCollection from '../productCollection/CategoriesCollection'
 import {
 	addThemePreview,
+	bindOfferWithProducts,
 	editThemePreview,
+	getOffersList,
 	getThemePreviewbyId,
 } from '../../../../api/function'
 import {
@@ -32,6 +34,7 @@ import {
 import { IoArrowBack } from 'react-icons/io5'
 import { IoMdAddCircle } from 'react-icons/io'
 import { FaCheckCircle } from 'react-icons/fa'
+import Offer from '../offers/offer'
 
 export default function ThemeOptions() {
 	const tempFileRef = useRef(null)
@@ -49,6 +52,12 @@ export default function ThemeOptions() {
 	const parts = location?.pathname?.split('/')
 	const path = parts?.slice(2)[0]
 	const themeRender = theme.find((theme) => theme.nav === path)
+
+	//offers
+	
+    const [selectedOffer, setSelectedOffer] = useState('');
+    const [availableOffersList, setAvailableOffersList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
 	const {
 		isModalOpen,
@@ -228,6 +237,12 @@ export default function ThemeOptions() {
 	const handleTaglineChange = (e) => {
 		setIsChange(true)
 		dispatch({ type: 'SET_TAGLINE', payload: e.target.value })
+	}
+
+	//Offers handler
+	const handleOffers = (e) => {
+		setIsChange(true)
+		dispatch({ type: 'SET_OFFERS', payload: e.target.value })
 	}
 
 	// OnSubmit Tagline CRUD
@@ -502,6 +517,48 @@ export default function ThemeOptions() {
 		})
 	}
 
+	useEffect(() => {
+        const getOffers = async () => {
+            try{
+                setIsLoading(true);
+                const response =await getOffersList();
+                setIsLoading(false);
+            
+                if(response.data.success){
+                    setAvailableOffersList(response.data.data);
+                }
+            }
+            catch(error){
+                console.log(error);
+                setIsLoading(false);
+                toast.error(response.data.message || 'Internal server error');
+            }
+    }
+        getOffers()
+    },[])
+
+	const handleOfferSelection = (offer) => {   
+		setSelectedOffer(offer);
+	
+	}
+
+	const bindOfferProductsHandler = async() => {	
+		try{
+			const productIds = themeOptionList.map(product => product._id);
+			const offerId = selectedOffer._id;
+			const response = await bindOfferWithProducts({offerId,productIds});
+			if(response.data.success){
+				toast.success(response.data.message);
+				setSelectedOffer('');
+				dispatch({ type: 'SET_THEME_OPTION_LIST', payload: [] });
+			}
+		}
+		catch(error){
+			console.log(error);
+			toast.error(response.data.message || 'Internal server error');
+		}
+	}
+
 	return (
 		<>
 			{showModal && (
@@ -544,7 +601,21 @@ export default function ThemeOptions() {
 								<IoMdAddCircle size={20} className='mr-1' />
 								ADD {themeRender?.nav?.toUpperCase()}
 							</Button>
-						) : (
+						) : 
+						themeRender.nav === 'offers' ? (
+							<Button
+							type='button'
+							className='relative w-fit'
+							onClick={
+								themeRender.nav === 'offers' ? handleModalClick : null
+							}
+						>
+							<IoMdAddCircle size={20} className='mr-1' />
+							ADD
+							{` ${themeRender?.nav?.toUpperCase()}`}
+						</Button>
+						) : 
+						(
 							<Button
 								type='button'
 								className='relative w-fit'
@@ -612,7 +683,18 @@ export default function ThemeOptions() {
 								<FaCheckCircle size={20} className='mr-1' />
 								SAVE REVIEW
 							</Button>
-						) : (
+						) : themeRender.nav === 'offers' ?
+						(
+						<Button
+							type='button'
+							onClick={bindOfferProductsHandler}
+							disabled={!themeOptionList?.length && !selectedOffer}
+						>
+							<FaCheckCircle size={20} className='mr-1' />
+							BIND OFFER
+						</Button>
+						):
+						(
 							<Button
 								type='button'
 								onClick={addEditCategories}
@@ -670,6 +752,16 @@ export default function ThemeOptions() {
 							selectedCategoryId={selectedCategoryId}
 							selectedBannerId={selectedBannerId}
 							onSelectBannerCategoryId={onSelectBannerCategoryId}
+						/>
+					)}
+
+					{themeRender?.nav === 'offers' && (
+						<Offer
+							selectedOffer={selectedOffer}
+							availableOffersList={availableOffersList}
+							handleOfferSelection={handleOfferSelection}	
+							themeOptionList={themeOptionList}
+							deleteCategory={deleteCategory}
 						/>
 					)}
 					<div>

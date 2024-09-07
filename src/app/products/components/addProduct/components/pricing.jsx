@@ -138,7 +138,7 @@ export default function PricingComponent({
 					</div>
 				</div>
 
-				<button
+				{/* <button
 					disabled={action === DETAILS_PRODUCT_ACTION_TYPE}
 					className={`flex items-center justify-center font-semibold text-sm mt-8 ${
 						action === DETAILS_PRODUCT_ACTION_TYPE
@@ -153,9 +153,9 @@ export default function PricingComponent({
 					onClick={() => setVariablePriceModal(true)}
 				>
 					<FaPlus className='mr-1' /> Variable Price
-				</button>
+				</button> */}
 			</div>
-			<div className='sm:col-span-full border-b'>
+			{/* <div className='sm:col-span-full border-b'>
 				{variablePricing?.length ? (
 					<VariablePriceTable
 						action={action}
@@ -171,7 +171,7 @@ export default function PricingComponent({
 						maxRange={maxRange}
 					/>
 				) : null}
-			</div>
+			</div> */}
 		</>
 	)
 }

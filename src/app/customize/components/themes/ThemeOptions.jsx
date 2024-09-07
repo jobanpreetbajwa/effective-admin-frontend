@@ -35,6 +35,7 @@ import { IoArrowBack } from 'react-icons/io5'
 import { IoMdAddCircle } from 'react-icons/io'
 import { FaCheckCircle } from 'react-icons/fa'
 import Offer from '../offers/offer'
+import Coupons from '../coupons/coupons'
 
 export default function ThemeOptions() {
 	const tempFileRef = useRef(null)
@@ -764,6 +765,11 @@ export default function ThemeOptions() {
 							deleteCategory={deleteCategory}
 						/>
 					)}
+					{
+						themeRender?.nav === 'coupons'  && (
+							<Coupons/>
+						)
+					}
 					<div>
 						<DragDropContext onDragEnd={moveProduct} onDragStart={dragStart}>
 							<Droppable droppableId='product-list'>

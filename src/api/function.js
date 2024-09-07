@@ -384,6 +384,12 @@ export const bindOfferWithProducts = async ({offerId,productIds}) => {
 	return await makeApiCall('POST', url, productIds, headers)
 }
 
+// Coupons
+export const createCouponCode = async (data) => {
+	const url = `${VITE_BASE_URL}/offers/create-coupon`
+	return await makeApiCall('POST', url, data, headers)
+}
+
 export {
 	fetchMoreProducts,
 	deleteBulkProduct,

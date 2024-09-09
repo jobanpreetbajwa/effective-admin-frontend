@@ -689,8 +689,14 @@ export default function ThemeOptions() {
 						<Button
 							type='button'
 							onClick={bindOfferProductsHandler}
-							disabled={!themeOptionList?.length && !selectedOffer}
-						>
+							disabled={themeOptionList?.length ? (
+								typeof selectedOffer === 'object' ? !Object.keys(selectedOffer).length :
+								typeof selectedOffer === 'string' ? selectedOffer.length >=0 : true
+							)
+							:
+							true
+					}
+						>	
 							<FaCheckCircle size={20} className='mr-1' />
 							BIND OFFER
 						</Button>

@@ -201,7 +201,7 @@ export const ThemeModal = ({
 							/>
 						)}
 
-						{isCategorySelected && themeRender?.nav == 'products'
+						{isCategorySelected 
 							? 'Select Products'
 							: 'Select Collection'}
 					</div>

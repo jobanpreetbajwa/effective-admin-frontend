@@ -5,7 +5,7 @@ import { createOffer } from '../../api/function';
 
 const options = ['percentage', 'fixed', 'bogo', 'free_shipping', 'bundle', 'seasonal', 'loyalty', 'flash'];
 
-export default function CreateOffer() {
+export default function CreateOffer({setOpenModal}) {
   const [formData, setFormData] = useState({
     type: options[0],
     description: '',
@@ -68,6 +68,9 @@ export default function CreateOffer() {
       } catch (error) {
         console.log(error);
         toast.error('Failed to create offer');
+      }
+      finally{
+        setOpenModal(false);
       }
     }
   };
@@ -189,7 +192,7 @@ export default function CreateOffer() {
           Is Active
         </Label>
       </div>
-      <Button type="submit">
+      <Button type="submit" size={'sm'}>
         Submit
       </Button>
     </form>

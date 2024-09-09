@@ -1,5 +1,6 @@
 import React from 'react'
-import { Modal } from 'flowbite-react'
+import { Modal,Button } from 'flowbite-react'
+import { RiDiscountPercentFill } from "react-icons/ri";
 export default function ApplyOffers({openModal,
   setOpenModal,availableOffersList,handleOfferSelection}) {
   return (
@@ -21,16 +22,25 @@ export default function ApplyOffers({openModal,
 					{
 						availableOffersList.map((offer,index)=>{
 							return(
-								<div key={index} className='flex justify-between items-center px-6 py-3 bg-white border-b-2'>
-									<div>
-										<p className='font-semibold'>{offer.type}</p>
-										<p>{offer.description}</p>
+								<div key={index} className='flex justify-between items-center pr-4 py-3 bg-white border-b-2'>
+									<div className='flex gap-2 items-center'>
+										{
+											offer.type === 'percentage' ?
+											<RiDiscountPercentFill color='green' size={30}/>
+											:
+											null
+										}	
+										<div>
+											<p className='font-semibold'>{offer.type}</p>
+											<p>{offer.description}</p>
+										</div>
 									</div>
+									
 									<div>
-										<button className='btn btn-primary' onClick={()=>{
+										<Button size={'sm'} onClick={()=>{
 											handleOfferSelection(offer)
 											setOpenModal(false)
-											}}>Apply</button>
+											}}>Apply</Button>
 									</div>
 								</div>
 							)

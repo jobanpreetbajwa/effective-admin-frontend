@@ -1,5 +1,6 @@
 import { theme } from "../../../constant/dashboard/constant";
 import { useLocation, useNavigate } from "react-router-dom";
+import { RiDiscountPercentFill } from "react-icons/ri";
 const ThemeModalContent = (props) => {
   const {
     isLoadingCategoryList,
@@ -15,7 +16,6 @@ const ThemeModalContent = (props) => {
   const path = parts?.slice(2)[0];
 
   const themeRender = theme.find((theme) => theme.nav === path);
-
   return (
     <>
       {themeRender?.nav === "tagline" ? (
@@ -33,11 +33,16 @@ const ThemeModalContent = (props) => {
                     selectedItem?.includes(item?._id)
                       ? "bg-slate-300"
                       : "bg-slate-100"
-                  } border-b hover:bg-slate-300 cursor-pointer mb-1`}
+                  } border-b hover:bg-slate-300 cursor-pointer mb-1
+                  ${item?.offers && item.offers.length > 0 && item.offers[0].type === 'percentage' ? 'opacity-30 cursor-not-allowed' : ''}
+                  `}
                   onClick={() => {
                     if (themeRender?.nav === "slideshow") {
                       onSingleItemClick(item?._id);
                     } else {
+                      if(item?.offers && item.offers.length > 0 && item.offers[0].type === 'percentage'){
+                        return;
+                      }
                       onItemClick(item?._id);
                       +item?.items <= 0
                         ? setHasProduct(false)
@@ -64,6 +69,18 @@ const ThemeModalContent = (props) => {
                       </p>
                     </div>
                   </div>
+                  {
+                    item?.offers && item.offers.length > 0 && item.offers[0].type === 'percentage'? (
+                      <div className="flex gap-1 items-center">
+                        <span className="font-semibold">{item.offers[0].discountPercent}</span>
+                        <RiDiscountPercentFill size={20}/>
+                    </div>
+                    ):
+                    null
+                  }
+                  <div>
+                    
+                    </div>
                 </div>
               );
             })

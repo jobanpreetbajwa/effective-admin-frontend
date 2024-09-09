@@ -4,12 +4,13 @@ import { toast } from 'sonner';
 import { getOffersList } from '../../../../api/function';
 import ApplyOffers from '../../../products/modal/applyOffers';
 import OfferDetails from './components/offerDetails';
+import CreateOfferModal from '../../../products/modal/createOfferModal';
 
 
 
 export default function Offer({selectedOffer,availableOffersList,handleOfferSelection,themeOptionList,deleteCategory}) {
     const [isOpen, setIsOpen] = useState(false);
-
+    const [createOffer, setCreateOffer] = useState(false);
   return (
 <>
 {
@@ -17,7 +18,22 @@ export default function Offer({selectedOffer,availableOffersList,handleOfferSele
     <ApplyOffers openModal={isOpen} setOpenModal={setIsOpen} availableOffersList={availableOffersList} handleOfferSelection={handleOfferSelection}/>
     :
     null
-}    <div
+
+}    
+{
+    createOffer ?
+    <CreateOfferModal openModal={createOffer} setOpenModal={setCreateOffer}/>
+    :
+    null
+}
+<div
+		className={`p-4 mb-1 text-sm  text-center ${createOffer?'':'text-blue-800 rounded-lg bg-blue-100 dark:bg-gray-800 dark:text-blue-400'}`}
+		role='alert'
+        onClick={()=>setCreateOffer(true)}
+	>
+            Create Offer
+    </div>
+<div
 		className={`p-4 mb-4 text-sm  text-center ${selectedOffer?'':'text-blue-800 rounded-lg bg-blue-100 dark:bg-gray-800 dark:text-blue-400'}`}
 		role='alert'
         onClick={()=>setIsOpen(true)}

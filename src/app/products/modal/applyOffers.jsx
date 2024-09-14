@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal,Button } from 'flowbite-react'
 import { RiDiscountPercentFill } from "react-icons/ri";
+import { BiSolidShoppingBags } from "react-icons/bi";
 export default function ApplyOffers({openModal,
   setOpenModal,availableOffersList,handleOfferSelection}) {
   return (
@@ -30,6 +31,12 @@ export default function ApplyOffers({openModal,
 											:
 											null
 										}	
+										{
+											offer.type === 'buyX_getY' ?
+											<BiSolidShoppingBags color='green' size={30}/>
+											:
+											null
+										}
 										<div>
 											<p className='font-semibold'>{offer.type}</p>
 											<p>{offer.description}</p>

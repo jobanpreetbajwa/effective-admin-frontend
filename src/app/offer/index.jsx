@@ -3,7 +3,7 @@ import { TextInput, Select, Button, Checkbox, Label } from 'flowbite-react';
 import { toast } from 'sonner';
 import { createOffer } from '../../api/function';
 
-const options = ['percentage', 'fixed', 'bogo', 'free_shipping', 'bundle', 'seasonal', 'loyalty', 'flash'];
+const options = ['percentage', 'fixed', 'free_shipping', 'buyX_getY', 'seasonal', 'loyalty', 'flash'];
 
 export default function CreateOffer({setOpenModal}) {
   const [formData, setFormData] = useState({
@@ -15,6 +15,8 @@ export default function CreateOffer({setOpenModal}) {
     startDate: '',
     endDate: '',
     isActive: true,
+    requiredQuantity: '',
+    freeQuantity: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -37,11 +39,16 @@ export default function CreateOffer({setOpenModal}) {
     const newErrors = {};
     if (!formData.type) newErrors.type = 'Type is required';
     if (!formData.description) newErrors.description = 'Description is required';
-    if (!['seasonal', 'loyalty', 'free_shipping'].includes(formData.type)) {
+    if (formData.type === 'buyX_getY') {
+      if (!formData.requiredQuantity) newErrors.requiredQuantity = 'Required quantity is required';
+      if (!formData.freeQuantity) newErrors.freeQuantity = 'Free quantity is required';
+    } else if (!['seasonal', 'loyalty', 'free_shipping'].includes(formData.type)) {
       if (!formData.discountPercent) newErrors.discountPercent = 'Discount Percent is required';
       if (!formData.discountUpto) newErrors.discountUpto = 'Discount upto is required';
     }
-    if (!formData.minOrderValue) newErrors.minOrderValue = 'Minimum order value is required';
+    if (formData.type !== 'buyX_getY' && !formData.minOrderValue) {
+      newErrors.minOrderValue = 'Minimum order value is required';
+    }
     if (!formData.startDate) newErrors.startDate = 'Start date is required';
     if (!formData.endDate) newErrors.endDate = 'End date is required';
     if (formData.startDate && formData.endDate && new Date(formData.startDate) > new Date(formData.endDate)) {
@@ -57,9 +64,13 @@ export default function CreateOffer({setOpenModal}) {
       setErrors(validationErrors);
     } else {
       // Remove discount fields if type is not matching
-      if (['seasonal', 'loyalty', 'free_shipping'].includes(formData.type)) {
+      if (['seasonal', 'loyalty', 'free_shipping', 'buyX_getY'].includes(formData.type)) {
         delete formData.discountPercent;
         delete formData.discountUpto;
+      }
+      // Remove minOrderValue if type is buyX_getY
+      if (formData.type === 'buyX_getY') {
+        delete formData.minOrderValue;
       }
       // Add form submission logic here
       try {
@@ -109,6 +120,36 @@ export default function CreateOffer({setOpenModal}) {
           {errors.description && <p className="text-red-500 text-sm font-semibold">{errors.description}</p>}
         </div>
       </div>
+      {formData.type === 'buyX_getY' && (
+        <div className='flex flex-col gap-2 md:flex-row md:gap-4 w-full'>
+          <div className='w-full'>
+            <Label htmlFor="requiredQuantity" value="Required Quantity" />
+            <TextInput
+              id="requiredQuantity"
+              name="requiredQuantity"
+              type="number"
+              value={formData.requiredQuantity}
+              onChange={handleChange}
+              placeholder="Enter required quantity"
+              required
+            />
+            {errors.requiredQuantity && <p className="text-red-500 text-sm font-semibold">{errors.requiredQuantity}</p>}
+          </div>
+          <div className='w-full'>
+            <Label htmlFor="freeQuantity" value="Free Quantity" />
+            <TextInput
+              id="freeQuantity"
+              name="freeQuantity"
+              type="number"
+              value={formData.freeQuantity}
+              onChange={handleChange}
+              placeholder="Enter free quantity"
+              required
+            />
+            {errors.freeQuantity && <p className="text-red-500 text-sm font-semibold">{errors.freeQuantity}</p>}
+          </div>
+        </div>
+      )}
       <div className='flex flex-col gap-2 md:flex-row md:gap-4 w-full'>
         <div className='w-full'>
           <Label htmlFor="discountPercent" value="Discount Percent" />
@@ -119,8 +160,8 @@ export default function CreateOffer({setOpenModal}) {
             value={formData.discountPercent}
             onChange={handleChange}
             placeholder="Enter discount value"
-            required={!['seasonal', 'loyalty', 'free_shipping'].includes(formData.type)}
-            disabled={['seasonal', 'loyalty', 'free_shipping'].includes(formData.type)}
+            required={!['seasonal', 'loyalty', 'free_shipping', 'buyX_getY'].includes(formData.type)}
+            disabled={['seasonal', 'loyalty', 'free_shipping', 'buyX_getY'].includes(formData.type)}
           />
           {errors.discountPercent && <p className="text-red-500 text-sm font-semibold">{errors.discountPercent}</p>}
         </div>
@@ -133,8 +174,8 @@ export default function CreateOffer({setOpenModal}) {
             value={formData.discountUpto}
             onChange={handleChange}
             placeholder="Enter discount value"
-            required={!['seasonal', 'loyalty', 'free_shipping'].includes(formData.type)}
-            disabled={['seasonal', 'loyalty', 'free_shipping'].includes(formData.type)}
+            required={!['seasonal', 'loyalty', 'free_shipping', 'buyX_getY'].includes(formData.type)}
+            disabled={['seasonal', 'loyalty', 'free_shipping', 'buyX_getY'].includes(formData.type)}
           />
           {errors.discountUpto && <p className="text-red-500 text-sm font-semibold">{errors.discountUpto}</p>}
         </div>
@@ -149,7 +190,8 @@ export default function CreateOffer({setOpenModal}) {
             value={formData.minOrderValue}
             onChange={handleChange}
             placeholder="Enter minimum order value"
-            required
+            required={formData.type !== 'buyX_getY'}
+            disabled={formData.type === 'buyX_getY'}
           />
           {errors.minOrderValue && <p className="text-red-500 text-sm font-semibold">{errors.minOrderValue}</p>}
         </div>
